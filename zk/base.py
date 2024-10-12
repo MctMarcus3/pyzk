@@ -160,6 +160,16 @@ class ZK(object):
         self.user_packet_size = 28 # default zk6
         self.end_live_capture = False
 
+    def __enter__(self, *args, **kwargs):
+        # connect to device
+        self.connect(*args, **kwargs)
+        # disable device, this method ensures no activity on the device while the process is run
+        self.disable_device()
+        return self
+
+    def __exit__(self, *args, **kwargs):
+        return self.disconnect()
+    
     def __nonzero__(self):
         """
         for boolean test
